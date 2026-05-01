@@ -1,120 +1,126 @@
 # DocQA
 
-Local Document Q&A over uploaded PDF files.
+A fully local PDF Question Answering system powered by a Retrieval-Augmented Generation (RAG) pipeline. Upload a PDF, ask questions, and get accurate answers — no external APIs, no internet required.
 
-This project follows the provided technical design:
+---
 
-- FastAPI backend
-- PyMuPDF PDF parsing
-- sentence-transformers embeddings
-- FAISS vector search
-- Ollama + Mistral answer generation
-- Minimal React/Vite frontend
+## Features
 
-No external APIs are used at inference time. Ollama must be running locally.
+- Upload and process PDF documents
+- Intelligent text chunking and semantic embedding
+- Fast similarity search using FAISS
+- Local LLM answer generation via Ollama
+- Streaming responses (Server-Sent Events)
+- One-command setup with Docker Compose
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React + Vite |
+| Backend | FastAPI |
+| Embeddings | sentence-transformers (`all-MiniLM-L6-v2`) |
+| Vector Store | FAISS |
+| LLM Runtime | Ollama (`llama3.2:1b`) |
+| Containerization | Docker & Docker Compose |
+
+---
+
+## System Architecture
+
+The system follows a standard RAG pipeline: PDF → chunking → embedding → FAISS index → semantic retrieval → local LLM generation.
+
+For a detailed breakdown, see [System Architecture](SYSTEM_ARCHITECTURE.md).
+
+---
+
+## Demo
+
+[Demo Video](#)
+
+---
 
 ## Project Structure
 
-```text
+```
 DocQA/
 ├── backend/
 │   ├── app/
-│   │   ├── main.py
-│   │   ├── routers/
-│   │   ├── services/
 │   │   ├── models/
-│   │   └── config.py
-│   ├── tests/
-│   ├── uploads/
+│   │   │   ├── requests.py
+│   │   │   └── responses.py
+│   │   ├── routers/
+│   │   │   ├── ask.py
+│   │   │   └── upload.py
+│   │   ├── services/
+│   │   │   ├── chunking_service.py
+│   │   │   ├── embedding_service.py
+│   │   │   ├── pdf_service.py
+│   │   │   ├── qa_service.py
+│   │   │   └── vector_store_service.py
+│   │   ├── config.py
+│   │   └── main.py
+│   ├── Dockerfile
 │   ├── requirements.txt
-│   ├── run.ps1
-│   └── run.sh
-└── frontend/
-    ├── src/
-    │   ├── components/
-    │   ├── api.js
-    │   ├── App.jsx
-    │   └── main.jsx
-    └── package.json
+│   └── .env.example
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── AnswerDisplay.jsx
+│   │   │   ├── FileUpload.jsx
+│   │   │   └── QuestionInput.jsx
+│   │   ├── api.js
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── Dockerfile
+│   ├── index.html
+│   └── package.json
+├── docker-compose.yml
+├── ollama-init.sh
+├── README.md
+└── SYSTEM_ARCHITECTURE.md
 ```
 
-## Prerequisites
+---
 
-Install and start Ollama:
+## Setup
 
-```powershell
-ollama pull mistral
-ollama serve
+### Prerequisite
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
+
+### Run
+
+```bash
+git clone https://github.com/your-username/DocQA.git
+cd DocQA
+docker-compose up --build
 ```
 
-Use Python 3.11+ for the backend and Node.js 20+ for the frontend.
+> **Note:** The first run downloads the `llama3.2:1b` model via Ollama. This may take **5–15 minutes** depending on your internet speed. Subsequent startups are fast.
 
-## Run Backend
+### Access
 
-```powershell
-cd "C:\Dev Work\DocQA\backend"
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
+| Service | URL |
+|---|---|
+| Frontend | http://localhost:5173 |
+| Backend API Docs | http://localhost:8000/docs |
 
-The first backend startup may download the `sentence-transformers/all-MiniLM-L6-v2`
-embedding model if it is not already cached locally.
+---
 
-Backend endpoints:
+## Usage
 
-- `POST /upload` with multipart field `file`
-- `POST /ask` with JSON `{ "document_id": "...", "question": "...", "top_k": 5 }`
-- `GET /health`
+1. Open `http://localhost:5173`
+2. Upload a PDF document
+3. Type a question and click **Ask**
+4. The answer streams back in real time
 
-API docs are available at:
+---
 
-```text
-http://localhost:8000/docs
-```
+## Notes
 
-## Run Frontend
-
-```powershell
-cd "C:\Dev Work\DocQA\frontend"
-npm install
-npm run dev
-```
-
-Open:
-
-```text
-http://localhost:5173
-```
-
-The frontend calls the backend at `http://localhost:8000`. To override:
-
-```powershell
-$env:VITE_API_BASE_URL="http://localhost:8000"
-npm run dev
-```
-
-## Configuration
-
-Copy `backend/.env.example` to `backend/.env` if you want local overrides.
-
-Important settings:
-
-- `OLLAMA_URL=http://localhost:11434`
-- `OLLAMA_MODEL=mistral`
-- `EMBEDDING_MODEL_NAME=sentence-transformers/all-MiniLM-L6-v2`
-- `CHUNK_SIZE=1800`
-- `CHUNK_OVERLAP=200`
-- `DEFAULT_TOP_K=5`
-- `MIN_SIMILARITY_SCORE=0.05`
-
-## Tests
-
-```powershell
-cd "C:\Dev Work\DocQA\backend"
-pytest
-```
-
-The included tests cover chunking, prompt construction, vector search, upload validation,
-and request validation.
+- **Fully local** — no data leaves your machine; no OpenAI or any external API is used
+- **First startup is slow** due to the one-time model download; all subsequent runs start in seconds
+- **Model tradeoff** — `llama3.2:1b` is optimised for speed on CPU; for higher accuracy on capable hardware, swap the model in `.env`
