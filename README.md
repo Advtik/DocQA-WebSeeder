@@ -32,7 +32,7 @@ A fully local PDF Question Answering system powered by a Retrieval-Augmented Gen
 
 The system follows a standard RAG pipeline: PDF → chunking → embedding → FAISS index → semantic retrieval → local LLM generation.
 
-For a detailed breakdown, see [System Architecture](SYSTEM_ARCHITECTURE.md).
+For a detailed breakdown, see [System Architecture](https://drive.google.com/file/d/1xCsm6kpNlU4n9XXZGokL9LfzSsikHSJN/view?usp=sharing).
 
 ---
 
@@ -79,8 +79,7 @@ DocQA/
 │   └── package.json
 ├── docker-compose.yml
 ├── ollama-init.sh
-├── README.md
-└── SYSTEM_ARCHITECTURE.md
+└── README.md
 ```
 
 ---
@@ -94,8 +93,8 @@ DocQA/
 ### Run
 
 ```bash
-git clone https://github.com/your-username/DocQA.git
-cd DocQA
+git clone https://github.com/Advtik/DocQA-WebSeeder.git
+cd DocQA-WebSeeder
 docker-compose up --build
 ```
 
