@@ -42,6 +42,12 @@ For a detailed breakdown, see [System Architecture](https://drive.google.com/fil
 
 ---
 
+## 📘 Full Documentation
+
+This project includes a detailed beginner-friendly book explaining the entire system, including architecture, RAG pipeline, and design tradeoffs.
+
+👉 [Read the Complete DocQA Book](https://drive.google.com/file/d/1ShQWSHH7i-DnMKtex1WlUoUgR7PlnHSu/view?usp=sharing)
+
 ## Project Structure
 
 ```
