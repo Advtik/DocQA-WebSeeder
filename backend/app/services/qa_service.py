@@ -29,6 +29,7 @@ ANSWER RULES:
 - Multi-part questions → answer each part in one flowing paragraph
 - Not in context at all → respond EXACTLY: "I could not find information about this in the provided document."
 - If something is not present in the given document or the context then tell it directly
+- If there is something not present respond EXACTLY: "I could not find information about this in the provided document."
 
 OUTPUT FORMAT:
 - Prose only, no bullet points, no numbered lists, no headers

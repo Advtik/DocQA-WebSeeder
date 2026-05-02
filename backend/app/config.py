@@ -25,7 +25,7 @@ class Settings:
     default_top_k: int = int(os.getenv("DEFAULT_TOP_K", "5"))
     max_top_k: int = int(os.getenv("MAX_TOP_K", "10"))
     max_file_size_mb: int = int(os.getenv("MAX_FILE_SIZE_MB", "20"))
-    min_similarity_score: float = float(os.getenv("MIN_SIMILARITY_SCORE", "0.0"))
+    min_similarity_score: float = float(os.getenv("MIN_SIMILARITY_SCORE", "0.05"))
     ollama_timeout_seconds: float = float(os.getenv("OLLAMA_TIMEOUT_SECONDS", "120"))
 
     @property

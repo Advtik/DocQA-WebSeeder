@@ -38,7 +38,7 @@ For a detailed breakdown, see [System Architecture](https://drive.google.com/fil
 
 ## Demo
 
-[Demo Video](#)
+[Demo Video](https://drive.google.com/file/d/1qZUmFxD47HPO9YaLv1u17u8cz2LYZqhD/view?usp=sharing)
 
 ---
 
